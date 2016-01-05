@@ -1,8 +1,7 @@
-package test;
+package customer.dao.impl;
 
 import customer.dao.CustomerDAO;
 import customer.model.Customer;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,11 +15,11 @@ import java.sql.SQLException;
 public class CustomerDAOImpl implements CustomerDAO {
 
     private DataSource dataSource;
-    private JdbcTemplate jdbcTemplateObject;
+   // private JdbcTemplate jdbcTemplateObject;
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+       // this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
 
@@ -52,7 +51,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 
         System.out.println("Created Record Name = " + customer.getName() + " Age = " + customer.getAge());
-        return;
+
     }
 
 
@@ -116,6 +115,32 @@ public class CustomerDAOImpl implements CustomerDAO {
             }
         }
 
+
+    }
+
+    public void deleteById(int id){
+
+        String sql="delete from customer where CUST_ID=?";
+        Connection conn= null;
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
 
     }
 }
