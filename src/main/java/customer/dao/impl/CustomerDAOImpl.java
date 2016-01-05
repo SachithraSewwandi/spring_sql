@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hsenid on 1/5/16.
@@ -49,11 +51,9 @@ public class CustomerDAOImpl implements CustomerDAO {
             }
         }
 
-
         System.out.println("Created Record Name = " + customer.getName() + " Age = " + customer.getAge());
 
     }
-
 
     public Customer findByCustomerId(int custId){
         String sql = "SELECT * FROM customer WHERE CUST_ID = ?";
@@ -66,15 +66,43 @@ public class CustomerDAOImpl implements CustomerDAO {
             Customer customer = null;
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                customer = new Customer(
-                        rs.getInt("CUST_ID"),
-                        rs.getString("NAME"),
-                        rs.getInt("Age")
-                );
+                customer = new Customer(rs.getInt("CUST_ID"), rs.getString("NAME"), rs.getInt("Age"));
             }
             rs.close();
             ps.close();
             return customer;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Customer> findCustomerByAge(int age){
+
+        String sql="Select   *from customer WHERE Age=?";
+        Connection conn=null;
+        List<Customer> customerList=new ArrayList<Customer>();
+        try{
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, age);
+            Customer customer = null;
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                customer = new Customer(rs.getInt("CUST_ID"), rs.getString("NAME"), rs.getInt("Age"));
+                customerList.add(customer);
+            }
+            rs.close();
+            ps.close();
+            return customerList;
 
         } catch (SQLException e) {
             e.printStackTrace();
