@@ -1,4 +1,4 @@
-package model;
+package customer.model;
 
 /**
  * Created by hsenid on 1/5/16.
@@ -12,6 +12,10 @@ public class Customer {
         this.custId = custId;
         this.age = age;
         this.name = name;
+    }
+
+    public Customer(){
+
     }
 
     public int getCustId() {

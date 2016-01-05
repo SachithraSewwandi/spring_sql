@@ -1,6 +1,6 @@
-package dao;
+package customer.dao;
 
-import model.Customer;
+import customer.model.Customer;
 
 /**
  * Created by hsenid on 1/5/16.
@@ -8,4 +8,8 @@ import model.Customer;
 public interface CustomerDAO {
     public void insert(Customer customer);
     public Customer findByCustomerId(int custId);
+    public void update(Customer customer);
+/*
+    public void deleteById(int cusId);
+*/
 }
